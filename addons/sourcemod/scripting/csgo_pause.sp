@@ -33,7 +33,7 @@ public Action:Command_ForcePause(client, args) {
         return Plugin_Handled;
 
     ServerCommand("mp_pause_match");
-    PrintToChatAll("%N has paused", "ForcePausedMessage", client);
+    PrintToChatAll("%N has paused", client);
     return Plugin_Handled;
 }
 
@@ -42,7 +42,7 @@ public Action:Command_ForceUnpause(client, args) {
         return Plugin_Handled;
 
     ServerCommand("mp_unpause_match");
-    PrintToChatAll("%N has unpaused", "ForceUnpausedMessage", client);
+    PrintToChatAll("%N has unpaused", client);
     return Plugin_Handled;
 }
 
@@ -54,7 +54,7 @@ public Action:Command_Pause(client, args) {
     g_tUnpaused = false;
 
     ServerCommand("mp_pause_match");
-    PrintToChatAll("%N has requested a pause.", "PauseMessage", client);
+    PrintToChatAll("%N has requested a pause.", client);
 
     return Plugin_Handled;
 }
@@ -73,9 +73,9 @@ public Action:Command_Unpause(client, args) {
     if (g_tUnpaused && g_ctUnpaused)  {
         ServerCommand("mp_unpause_match");
     } else if (g_tUnpaused && !g_ctUnpaused) {
-        PrintToChatAll("The T team wants to unpause. Waiting for the CT team to type \x05!unpause", "UnpauseTMessage");
+        PrintToChatAll("The T team wants to unpause. Waiting for the CT team to type \x05!unpause");
     } else if (!g_tUnpaused && g_ctUnpaused) {
-        PrintToChatAll("The CT team wants to unpause. Waiting for the T team to type \x05!unpause", "UnpauseCTMessage");
+        PrintToChatAll("The CT team wants to unpause. Waiting for the T team to type \x05!unpause");
     }
 
     return Plugin_Handled;
