@@ -1,4 +1,4 @@
-# csgo-pause-plugin
+# CS:GO Pause Plugin
 Adds simple pause/unpause commands for players
 
 
@@ -9,3 +9,6 @@ It adds sm_pause (!pause) and sm_unpause (!unpause) commands. Anyone can request
 It also adds admin commands sm_forcepause and sm_forceunpause to force pauses/unpauses.
 
 Installation: just copy csgo_pause.smx into addons/sourcemod/plugins.
+
+This plugin was built by: Splewis
+And reworked by me to support more variations.
