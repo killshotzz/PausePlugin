@@ -1,0 +1,27 @@
+"Phrases"
+{
+	"ForcePausedMessage"
+	{
+		"en"			"%N has paused"
+	}
+	
+	"ForceUnpausedMessage"
+	{
+		"en"			"%N has unpaused"
+	}
+	
+	"PauseMessage"
+	{
+		"en"			"%N has requested a pause."
+	}
+	
+	"UnpauseCTMessage"
+	{
+		"en"			"The T team wants to unpause. Waiting for the CT team to type {GREEN}\x05!unpause{NORMAL}"
+	}
+
+	"UnpauseTMessage"
+	{
+		"en"			"The T team wants to unpause. Waiting for the T team to type {GREEN}\x05!unpause{NORMAL}"
+	}
+}

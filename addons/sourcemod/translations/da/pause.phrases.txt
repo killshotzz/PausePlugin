@@ -1,0 +1,27 @@
+"Phrases"
+{
+	"ForcePausedMessage"
+	{
+		"en"			"%N har paused spillet."
+	}
+	
+	"ForceUnpausedMessage"
+	{
+		"en"			"%N har unpaused spillet."
+	}
+	
+	"PauseMessage"
+	{
+		"en"			"%N har bedt om en pause."
+	}
+	
+	"UnpauseTMessage"
+	{
+		"en"			"T siden beder om unpause. Venter på at CT skriver {GREEN}\x05!unpause{NORMAL}"
+	}
+
+	"UnpauseCTMessage"
+	{
+		"en"			"CT siden beder om unpause. Venter på at T skriver {GREEN}\x05!unpause{NORMAL}"
+	}
+}
