@@ -1,0 +1,30 @@
+"Phrases"
+{
+  "ForcePause"
+  {
+    "#format" "{1:N}"
+    "da"    "{1} har pauset kampen"
+  }
+
+  "ForceUnpause"
+  {
+    "#format" "{1:N}"
+    "da"    "{1} har unpauset kampen"
+  }
+
+  "Pause"
+  {
+    "#format" "{1:N}"
+    "da"    "{1} har anmodet om at pause"
+  }
+
+  "ctUnpause"
+  {
+    "da"    "CT har anmodet om at unpause. Venter på T til at skrive \x05!unpause"
+  }
+
+  "tUnpause"
+  {
+    "da"    "T har anmodet om at unpause. Venter på CT til at skrive \x05!unpause"
+  }
+}
