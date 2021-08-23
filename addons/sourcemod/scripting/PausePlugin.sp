@@ -2,6 +2,7 @@
 #include <cstrike>
 #include <sourcemod>
 #include <sdktools>
+#include <colors>
 
 /** Bools **/
 new bool:g_ctUnpaused = false;
@@ -66,7 +67,7 @@ public Action Command_ForceTechPause(int client, int args){
         return Plugin_Handled;
 
     ServerCommand("mp_pause_match");
-    PrintToChatAll("%t, ForceTechPauseMessage", client);
+    PrintToChatAll("%t", "ForceTechPauseMessage", client);
     return Plugin_Handled;
 }
 
@@ -96,7 +97,7 @@ public Action Command_TechPause(int client, int args){
         return Plugin_Handled;
 
     ServerCommand("mp_pause_match");
-    PrintToChatAll("%t, TechPauseMessage", client, client);
+    PrintToChatAll("%t", "TechPauseMessage", client, client);
     return Plugin_Handled;
 }
 
@@ -129,9 +130,9 @@ public Action Command_Unpause(int client, int args) {
     if (g_tUnpaused && g_ctUnpaused)  {
         ServerCommand("mp_unpause_match");
     } else if (g_tUnpaused && !g_ctUnpaused) {
-        PrintToChatAll("%t", "tUnpause", client);
+        CPrintToChatAll("%t", "tUnpause", client);
     } else if (!g_tUnpaused && g_ctUnpaused) {
-        PrintToChatAll("%t", "ctUnpause", client);
+        CPrintToChatAll("%t", "ctUnpause", client);
     }
 
     return Plugin_Handled;
