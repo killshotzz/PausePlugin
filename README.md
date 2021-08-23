@@ -25,3 +25,7 @@ And reworked by me to support more variations.
 # Changelog
 * 1.0.1 - Rework of the plugin itself.
 * 1.0.2 - Added translation files, fixed more variations of commands and cleaned up the code.
+
+* To Do:
+* - Add timer for pauses (30 seconds and the unpause)
+* - Add limit for amount of pauses per team, per map
