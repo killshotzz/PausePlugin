@@ -29,11 +29,11 @@
 
   "ctUnpause"
   {
-    "en"      "The CT team wants to unpause. Waiting for the T team to type \x05!unpause."
+    "en"      "The CT team wants to unpause. Waiting for the T team to type {lightgreen}!unpause or !up{lightgreen}."
   }
 
   "tUnpause"
   {
-    "en"      "The T team wants to unpause. Waiting for the CT team to type \x05!unpause."
+    "en"      "The T team wants to unpause. Waiting for the CT team to type {lightgreen}!unpause or !up{lightgreen}."
   }
 }
