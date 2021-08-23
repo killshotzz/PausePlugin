@@ -19,7 +19,7 @@ It also adds commands for admins to use:
 # Installation
 Simply download the latest build and paste the folder structure, to your server.
 
-This plugin was built by: @splewis
+This plugin was built by: @github/splewis
 And reworked by me to support more variations.
 
 ## Changelog
