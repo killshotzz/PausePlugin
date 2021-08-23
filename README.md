@@ -1,14 +1,27 @@
 # CS:GO Pause Plugin
 Adds simple pause/unpause commands for players
 
-
 This is an extremely simple plugin to add pause-commands for players that simply wrap the builtin mp_pause_match and mp_unpause_match commands. I didn't see one of those so I figured someone might have some use for it.
 
-It adds sm_pause (!pause, !tac & !tactical) and sm_unpause (!unpause) commands. Anyone can request a pause, and both teams (CT and T) must write !unpause to unpause.
+It adds some simple commands that can be used by all players:
 
-It also adds admin commands sm_forcepause and sm_forceunpause to force pauses/unpauses.
+# Player Commands (Variations . / !)
+* sm_tech (!tech, !t)
+* sm_pause (!pause, !p, !tac, !tactical)
+* sm_unpause (!unpause, !up)
 
-Installation: just copy csgo_pause.smx into addons/sourcemod/plugins.
+It also addas commands for admins to use:
+# Admin Commands (Variations: . / !)
+* sm_forcetechpause (!forcetechnical, !ftech, !ftec, ft)
+* sm_forcepause (!forcepause, !fp)
+* sm_forceunpause (!forceunpause, !fup)
+
+# Installation
+Simply download the latest build and paste the folder structure, to your server.
 
 This plugin was built by: Splewis
 And reworked by me to support more variations.
+
+# Changelog
+1.0.1 - Rework of the plugin itself.
+1.0.2 - Added translation files, fixed more variations of commands and cleaned up the code.
