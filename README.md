@@ -23,5 +23,5 @@ This plugin was built by: Splewis
 And reworked by me to support more variations.
 
 # Changelog
-1.0.1 - Rework of the plugin itself.
-1.0.2 - Added translation files, fixed more variations of commands and cleaned up the code.
+* 1.0.1 - Rework of the plugin itself.
+* 1.0.2 - Added translation files, fixed more variations of commands and cleaned up the code.
