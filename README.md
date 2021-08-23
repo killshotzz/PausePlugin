@@ -10,7 +10,7 @@ It adds some simple commands that can be used by all players:
 > * sm_pause (!pause, !p, !tac, !tactical)
 > * sm_unpause (!unpause, !up)
 
-It also addas commands for admins to use:
+It also adds commands for admins to use:
 # Admin Commands (Variations: . / !)
 > * sm_forcetechpause (!forcetechnical, !ftech, !ftec, ft)
 > * sm_forcepause (!forcepause, !fp)
