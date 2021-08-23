@@ -1,0 +1,39 @@
+"Phrases"
+{
+  "ForceTechPauseMessage"
+  {
+    "da"      "En admin har fremtvunget en teknisk timeout!"
+  }
+
+  "ForcePause"
+  {
+    "da"      "En admin har fremtvunget en timout!"
+  }
+
+  "ForceUnpause"
+  {
+    "da"      "En admin har fremtvunget unpause!"
+  }
+
+  "TechPauseMessage"
+  {
+    "#format" "{1:N}"
+    "da"      "{1} har bedt om en teknisk timeout."
+  }
+
+  "Pause"
+  {
+    "#format" "{1:N}"
+    "da"      "{1} har bedt om en timeout."
+  }
+
+  "ctUnpause"
+  {
+    "da"      "CT vil gerne unpause. Venter på T til at skrive {lightgreen}!unpause eller !up{lightgreen}."
+  }
+
+  "tUnpause"
+  {
+    "da"      "T vil gerne unpause. Venter på CT til at skrive {lightgreen}!unpause eller !up{lightgreen}."
+  }
+}
