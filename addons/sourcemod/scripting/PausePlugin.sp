@@ -106,7 +106,7 @@ public Event_Round_Start(Handle:event, const String:name[], bool:dontBroadcast)
 //Pause and Unpause Commands + timers
 public Action:Pause(client, args)
 {
-    if (GetConVarBool(sv_pausable) && g_live)
+    if (GetConVarBool(sv_pausable))
     {
         if (GetConVarBool(g_h_pause_confirm))
         {

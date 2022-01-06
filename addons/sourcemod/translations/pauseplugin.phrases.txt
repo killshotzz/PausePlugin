@@ -52,16 +52,6 @@
 	{
 		"en"			"Match was auto unpaused because time limit reached"
 	}
-	"Auto Pause Notice"
-	{
-		"#format"		"{1:s}"
-		"en"			"Match will be paused because a player from '{1}' has left the server"
-	}
-	"Auto Unpause Notice"
-	{
-		"#format"		"{1:s}"
-		"en"			"Match has been auto paused because a player from '{1}' has left the server"
-	}
 	"Paused Via Rcon"
 	{
 		"en"			"Server is not paused or was paused via rcon"
