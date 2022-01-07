@@ -8,17 +8,11 @@
 new bool:g_ctUnpaused = false;
 new bool:g_tUnpaused = false;
 
-/** Chat aliases loaded **/
-#define ALIAS_LENGTH 64
-#define COMMAND_LENGTH 64
-ArrayList g_ChatAliases;
-ArrayList g_ChatAliasesCommands;
-
 public Plugin:myinfo = {
     name = "CS:GO Pause Commands",
     author = "splewis & ^kS",
     description = "Adds simple pause/unpause commands for players",
-    version = "1.0.2",
+    version = "1.0.2a",
     url = "https://forums.alliedmods.net"
 };
 
@@ -26,34 +20,28 @@ public void OnPluginStart() {
     /** Load Translations **/
     LoadTranslations("pauseplugin.phrases");
 
-    /** Cmds **/
+    /** Admin Commands **/
     RegAdminCmd("sm_forcetechpause", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
+    RegAdminCmd("sm_forcetechnical", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
+    RegAdminCmd("sm_ftech", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
+    RegAdminCmd("sm_ftec", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
+    RegAdminCmd("sm_ft", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
     RegAdminCmd("sm_forcepause", Command_ForcePause, ADMFLAG_GENERIC, "Forces a pause");
+    RegAdminCmd("sm_fp", Command_ForcePause, ADMFLAG_GENERIC, "Forces a pause");
     RegAdminCmd("sm_forceunpause", Command_ForceUnpause, ADMFLAG_GENERIC, "Forces an unpause");
+    RegAdminCmd("sm_fup", Command_ForceUnpause, ADMFLAG_GENERIC, "Forces an unpause");
+   
+    /** Pause Commands **/
     RegConsoleCmd("sm_pause", Command_Pause, "Requests a pause");
+    RegConsoleCmd("sm_p", Command_Pause, "Requests a pause");
+    RegConsoleCmd("sm_tech", Command_TechPause, "Calls for a tech pause");
+    RegConsoleCmd("sm_t", Command_Pause, "Requests a pause");
+    RegConsoleCmd("sm_tac", Command_Pause, "Requests a pause");
+    RegConsoleCmd("sm_tactical", Command_Pause, "Requests a pause");
+
+    /** Unpause Commands **/
     RegConsoleCmd("sm_unpause", Command_Unpause, "Requests an unpause");
-    RegConsoleCmd("sm_tech", Command_TechPause, "Calls for a text pause");
-
-
-    /** Client / Admin commands **/
-    g_ChatAliases = new ArrayList(ByteCountToCells(ALIAS_LENGTH));
-    g_ChatAliasesCommands = new ArrayList(ByteCountToCells(COMMAND_LENGTH));
-    AddAliasedCommand("forcetechnical", Command_ForceTechPause, "Force a technical pause");
-    AddAliasedCommand("ftech", Command_ForceTechPause, "Force a technical pause");
-    AddAliasedCommand("ftec", Command_ForceTechPause, "Force a technical pause");
-    AddAliasedCommand("ft", Command_ForceTechPause, "Force a technical pause");
-    AddAliasedCommand("forcepause", Command_ForcePause, "Forces the game to pause");
-    AddAliasedCommand("fp", Command_ForcePause, "Forces the game to pause");
-    AddAliasedCommand("forceunpause", Command_ForceUnpause, "Forces the game to unpause");
-    AddAliasedCommand("fup", Command_ForceUnpause, "Forces the game to unpause");
-    AddAliasedCommand("tech", Command_TechPause, "Calls for a tech pause");
-    AddAliasedCommand("t", Command_TechPause, "Calls for a tech pause");
-    AddAliasedCommand("pause", Command_Pause, "Pauses the game");
-    AddAliasedCommand("tac", Command_Pause, "Pauses the game");
-    AddAliasedCommand("p", Command_Pause, "Pauses the game");
-    AddAliasedCommand("tactical", Command_Pause, "Pauses the game");
-    AddAliasedCommand("unpause", Command_Unpause, "Unpauses the game");
-    AddAliasedCommand("up", Command_Unpause, "Unpauses the game");
+    RegConsoleCmd("sm_up", Command_Unpause, "Requests an unpause");
 }
 
 public OnMapStart() {
@@ -148,68 +136,4 @@ stock bool:IsValidClient(client) {
 /** IsPaused state **/
 stock bool:IsPaused() {
     return bool:GameRules_GetProp("m_bMatchWaitingForResume");
-}
-
-/** Add Aliased Command callback **/
-public void AddAliasedCommand(const char[] command, ConCmd callback, const char[] description) {
-  char smCommandBuffer[COMMAND_LENGTH];
-  Format(smCommandBuffer, sizeof(smCommandBuffer), "sm_%s", command);
-  RegConsoleCmd(smCommandBuffer, callback, description);
-
-  char dotCommandBuffer[ALIAS_LENGTH];
-  Format(dotCommandBuffer, sizeof(dotCommandBuffer), ".%s", command);
-  AddChatAlias(dotCommandBuffer, smCommandBuffer);
-}
-
-/** Add Chat Alias Callback */
-public void AddChatAlias(const char[] alias, const char[] command) {
-  // Don't allow duplicate aliases to be added.
-  if (g_ChatAliases.FindString(alias) == -1) {
-    g_ChatAliases.PushString(alias);
-    g_ChatAliasesCommands.PushString(command);
-  }
-}
-
-/** Check to chat alias callback **/
-public void CheckForChatAlias(int client, const char[] command, const char[] sArgs) {
-  // Splits to find the first word to do a chat alias command check.
-  char chatCommand[COMMAND_LENGTH];
-  char chatArgs[255];
-  int index = SplitString(sArgs, " ", chatCommand, sizeof(chatCommand));
-
-  if (index == -1) {
-    strcopy(chatCommand, sizeof(chatCommand), sArgs);
-  } else if (index < strlen(sArgs)) {
-    strcopy(chatArgs, sizeof(chatArgs), sArgs[index]);
-  }
-
-  if (chatCommand[0] && IsValidClient(client)) {
-    char alias[ALIAS_LENGTH];
-    char cmd[COMMAND_LENGTH];
-    for (int i = 0; i < GetArraySize(g_ChatAliases); i++) {
-      GetArrayString(g_ChatAliases, i, alias, sizeof(alias));
-      GetArrayString(g_ChatAliasesCommands, i, cmd, sizeof(cmd));
-      if (CheckChatAlias(alias, cmd, chatCommand, chatArgs, client)) {
-        break;
-      }
-    }
-  }
-}
-
-/* Checking if the alias is a command callback */
-static bool CheckChatAlias(const char[] alias, const char[] command, const char[] chatCommand,
-                           const char[] chatArgs, int client) {
-  if (StrEqual(chatCommand, alias, false)) {
-    // Get the original cmd reply source so it can be restored after the fake client command.
-    // This means and ReplyToCommand will go into the chat area, rather than console, since
-    // *chat* aliases are for *chat* commands.
-    ReplySource replySource = GetCmdReplySource();
-    SetCmdReplySource(SM_REPLY_TO_CHAT);
-    char fakeCommand[256];
-    Format(fakeCommand, sizeof(fakeCommand), "%s %s", command, chatArgs);
-    FakeClientCommand(client, fakeCommand);
-    SetCmdReplySource(replySource);
-    return true;
-  }
-  return false;
 }
