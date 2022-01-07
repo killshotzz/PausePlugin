@@ -17,12 +17,13 @@ new bool:g_pause_freezetime = false;
 new bool:g_pause_offered_t = false;
 new bool:g_pause_offered_ct = false;
 new bool:g_paused = false;
+new bool:g_teamOnly = false;
+new bool:g_silence = false;
 
 /* Handles */
 new Handle:sv_pausable;
 new Handle:g_h_auto_unpause = INVALID_HANDLE;
 new Handle:g_h_auto_unpause_delay = INVALID_HANDLE;
-//new Handle:g_h_pause_freezetime = INVALID_HANDLE;
 new Handle:g_h_pause_confirm = INVALID_HANDLE;
 new Handle:g_h_pause_limit = INVALID_HANDLE;
 new g_t_pause_count = 0;
@@ -34,11 +35,10 @@ public void OnPluginStart() {
     /** Load Translations **/
     LoadTranslations("pauseplugin.phrases");
 
-    // Pause and Unpause stuff
+    /** ConVar **/
     sv_pausable = FindConVar ("sv_pausable");
     g_h_pause_confirm = CreateConVar("sm_pause_confirm", "0", "Wait for other team to confirm pause: 0 = off, 1 = on", FCVAR_NOTIFY);
     g_h_auto_unpause = CreateConVar("sm_auto_unpause", "1", "Sets auto unpause: 0 = off, 1 = on", FCVAR_NOTIFY);
-//    g_h_pause_freezetime = CreateConVar("wm_pause_freezetime", "1", "Wait for freeze time to pause: 0 = off, 1 = on", FCVAR_NOTIFY);
     g_h_auto_unpause_delay = CreateConVar("sm_auto_unpause_delay", "30", "Sets the seconds to wait before auto unpause", FCVAR_NOTIFY, true, 0.0);
     g_h_pause_limit = CreateConVar("sm_pause_limit", "2", "Sets max pause count per team per half", FCVAR_NOTIFY);
 }
@@ -54,8 +54,8 @@ public Action:SayChat(client, args)
     new String:type[64];
     GetCmdArg(0, type, sizeof(type));
     
-    new bool:teamOnly = false;
-    new bool:silence = false;
+    g_teamOnly = false;
+    g_silence = false;
     
     if (StrEqual(type, "say_team", false))
     {
@@ -77,6 +77,10 @@ public Action:SayChat(client, args)
         {
             Unpause(client, args);
         }
+        else if (StrEqual(command, "technical", false) || StrEqual(command, "tech", false) || StrEqual(command, "t", false))
+        {
+            Pause(client, args);
+        }
     }
 }
 
@@ -87,7 +91,7 @@ public Event_Round_Start(Handle:event, const String:name[], bool:dontBroadcast)
         return;
     }
     
-    //Pause command fire on round end May change to on round start
+    /** Pause commands executed in the end of the round, may activate in the start of the next round **/
     if (g_pause_freezetime == true)
     {
         g_pause_freezetime = false;
@@ -98,7 +102,6 @@ public Event_Round_Start(Handle:event, const String:name[], bool:dontBroadcast)
             g_h_stored_timer = CreateTimer(GetConVarFloat(g_h_auto_unpause_delay), UnPauseTimer);
         }
         g_paused = true;
-        //ServerCommand("mp_pause_match 1");
     }
 }
 
@@ -120,24 +123,11 @@ public Action:Pause(client, args)
                 
                 g_pause_offered_ct = false;
                 g_ct_pause_count++;
-                
-                //if (GetConVarBool(g_h_pause_freezetime))
-                //{
                 PrintToChatAll("\x01 \x09[\x04%s\x09]\x01 %T", "Pause Freeze Time", LANG_SERVER);
                 g_pause_freezetime = true;
-                /*}
-                else
-                {
-                    PrintToChatAll("\x01 \x09[\x04%s\x09]\x01 %T", CHAT_PREFIX, "Unpause Notice", LANG_SERVER);
-                    if (GetConVarBool(g_h_auto_unpause))
-                    {
-                        PrintToChatAll("\x01 \x09[\x04%s\x09]\x01 %i %T", CHAT_PREFIX, GetConVarInt(g_h_auto_unpause_delay), "Unpause Timer", LANG_SERVER);
-                        g_h_stored_timer = CreateTimer(GetConVarFloat(g_h_auto_unpause_delay), UnPauseTimer);
-                    }*/
                 g_paused = true;
                 ServerCommand("mp_pause_match 1");
-                return;
-                //}
+                    return;
             }
             else if (GetClientTeam(client) == 3 && g_pause_offered_t == true)
             {
@@ -148,24 +138,18 @@ public Action:Pause(client, args)
                 }
                 g_pause_offered_t = false;
                 g_t_pause_count++;
-                
-                //if (GetConVarBool(g_h_pause_freezetime))
-                //{
                 PrintToChatAll("\x01 \x09[\x04%s\x09]\x01 %T", "Pause Round End", LANG_SERVER);
                 g_pause_freezetime = true;
-                /*}
-                else
-                {
-                    PrintToChatAll("\x01 \x09[\x04%s\x09]\x01 %T", CHAT_PREFIX, "Unpause Notice", LANG_SERVER);
-                    if (GetConVarBool(g_h_auto_unpause))
-                    {
-                        PrintToChatAll("\x01 \x09[\x04%s\x09]\x01 %i %T", CHAT_PREFIX, GetConVarInt(g_h_auto_unpause_delay), "Unpause Timer", LANG_SERVER);
-                        g_h_stored_timer = CreateTimer(GetConVarFloat(g_h_auto_unpause_delay), UnPauseTimer);
-                    }*/
                 g_paused = true;
                 ServerCommand("mp_pause_match 1");
-                return;
-                //}
+                    return;
+            }
+            else if (g_technical_pause == true)
+            {
+                g_pause = true;
+                    return;
+
+                PrintToChatAll("\x01 \x09[\x04%s\x09]\x01 %T", "Technical Pause", LANG_SERVER);
             }
             else if (GetClientTeam(client) == 2 && g_t_pause_count == GetConVarInt(g_h_pause_limit))
             {
@@ -195,44 +179,20 @@ public Action:Pause(client, args)
         else if (GetClientTeam(client) == 3 && g_ct_pause_count != GetConVarInt(g_h_pause_limit) && !GetConVarBool(g_h_pause_confirm))
         {
             g_ct_pause_count++;
-            //if (GetConVarBool(g_h_pause_freezetime))
-            //{
             PrintToChatAll("\x01 \x09[\x04%s\x09]\x01 %T", "Pause Freeze Time", LANG_SERVER);
             g_pause_freezetime = true;
-            /*}
-            else
-            {
-                PrintToChatAll("\x01 \x09[\x04%s\x09]\x01 %T", CHAT_PREFIX, "Unpause Notice", LANG_SERVER);
-                if(GetConVarBool(g_h_auto_unpause))
-                {
-                    PrintToChatAll("\x01 \x09[\x04%s\x09]\x01 %i %T", CHAT_PREFIX, GetConVarInt(g_h_auto_unpause_delay), "Unpause Timer", LANG_SERVER);
-                    g_h_stored_timer = CreateTimer(GetConVarFloat(g_h_auto_unpause_delay), UnPauseTimer);
-                }*/
             g_paused = true;
             ServerCommand("mp_pause_match 1");
-            return;
-            //}
+                return;
         }
         else if (GetClientTeam(client) == 2 &&  g_t_pause_count != GetConVarInt(g_h_pause_limit) && GetConVarBool(g_h_pause_confirm) == false)
         {
             g_t_pause_count++;
-            //if (GetConVarBool(g_h_pause_freezetime))
-            //{
             PrintToChatAll("\x01 \x09[\x04%s\x09]\x01 %T", "Pause Freeze Time", LANG_SERVER);
             g_pause_freezetime = true;
-            /*}
-            else
-            {
-                PrintToChatAll("\x01 \x09[\x04%s\x09]\x01 %T", CHAT_PREFIX, "Unpause Notice", LANG_SERVER);
-                if(GetConVarBool(g_h_auto_unpause))
-                {
-                    PrintToChatAll("\x01 \x09[\x04%s\x09]\x01 %i %T", CHAT_PREFIX, GetConVarInt(g_h_auto_unpause_delay), "Unpause Timer", LANG_SERVER);
-                    g_h_stored_timer = CreateTimer(GetConVarFloat(g_h_auto_unpause_delay), UnPauseTimer);
-                }*/
             g_paused = true;
             ServerCommand("mp_pause_match 1");
-            return;
-            //}
+                return;
         }
         else if (GetClientTeam(client) == 2 && g_t_pause_count == GetConVarInt(g_h_pause_limit))
         {
