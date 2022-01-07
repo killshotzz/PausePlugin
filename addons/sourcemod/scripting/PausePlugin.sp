@@ -173,7 +173,7 @@ public Action timer_callback(Handle timer){
     global_variable_track_timer = null;
 
     ServerCommand("mp_unpause_match");
-    PrintToChatAll("\n30 second pause has ended. Resuming game!\n");
+    PrintToChatAll("%t", "Auto Unpause");
     return Plugin_Continue;
 }
 
