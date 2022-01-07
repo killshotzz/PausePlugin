@@ -137,10 +137,10 @@ public Action Command_Pause(int client, int args) {
         return Plugin_Handled;
     }
 
-    g_vcount[team_index] = global_variable_count[team_index] + 1;
+    g_vcount[team_index] = g_vcount[team_index] + 1;
     g_vtrack_timer = CreateTimer(timer_delay, timer_callback);
 
-    PrintToChatAll("%t", "Pause", client, global_variable_count[team_index]);
+    PrintToChatAll("%t", "Pause", client, g_vcount[team_index]);
     ServerCommand("mp_pause_match");
 
     return Plugin_Handled;
@@ -180,55 +180,57 @@ public Action timer_callback(Handle timer){
 **/
 
 /** New Callback Timer **/
-public Action timer_callback(Handle timer){
-    if(g_vtrack_timer = null);
-    return Plugin_Continue;
-
-	if (GetConVarBool(g_bTimerEnd))
+public Action timer_callback(Handle timer)
+{
+if (GetConVarBool(g_bTimerEnd))
 	{
-		Handle hTmp;
-		hTmp = FindConVar("mp_timelimit");
-		int iTimeLimit;
-		iTimeLimit = GetConVarInt(hTmp);
-		if (hTmp != null)
-			CloseHandle(hTmp);
-		if (iTimeLimit > 0)
+		    Handle hTmp;
+		    hTmp = FindConVar("mp_timelimit");
+		    int iTimeLimit;
+		    iTimeLimit = GetConVarInt(hTmp);
+		    if (hTmp != null)
+			    CloseHandle(hTmp);
+		    if (iTimeLimit > 0)
 		{
-			int timeleft;
-			GetPauseTimeLeft(timeleft);
-			switch (timeleft)
-			{
-				case 30:PrintToChatAll("%t", "Timeleft", timeleft);
-				case 20:PrintToChatAll("%t", "Timeleft", timeleft);
-				case 10:PrintToChatAll("%t", "Timeleft", timeleft);
-				case 3:PrintToChatAll("%t", "Timeleft", timeleft);
-				case 2:PrintToChatAll("%t", "Timeleft", timeleft);
-				case 1:PrintToChatAll("%t", "Timeleft", timeleft);	
-				case -1:
-				{
-					if (!g_bTimerEnd)
-					{
-						g_bTimerEnd = true;
-						ServerCommand("mp_unpause_match");
-				}
-			}
+			    int timeleft;
+			    GetPauseTimeLeft(timeleft);
+			    switch (timeleft)
+			    {
+				        case 30:PrintToChatAll("%t", "Timeleft", timeleft);
+				        case 20:PrintToChatAll("%t", "Timeleft", timeleft);
+				        case 10:PrintToChatAll("%t", "Timeleft", timeleft);
+				        case 3:PrintToChatAll("%t", "Timeleft", timeleft);
+				        case 2:PrintToChatAll("%t", "Timeleft", timeleft);
+				        case 1:PrintToChatAll("%t", "Timeleft", timeleft);	
+				        case -1:
+				        {
+					            if (!g_bTimerEnd)
+					            {
+						                g_bTimerEnd = true;
+						                ServerCommand("mp_unpause_match");
+				                }
+                        }
+			    }
+        }
 
-			if (timeleft == 30 || timeleft == 20 || timeleft == 10 || timeleft == 3 || timeleft == 2 || timeleft == 1)
-			{
+		if (timeleft == 30 || timeleft == 20 || timeleft == 10 || timeleft == 3 || timeleft == 2 || timeleft == 1)
+		{
 				CPrintToChatAll("%t", "Auto Unpause");
-			}
 		}
-        return Plugin_Continue;
-	}
+     }
+}
+		    
 
 /** Valid client state **/
-stock bool:IsValidClient(client) {
+stock bool:IsValidClient(client) 
+{
     if (client > 0 && client <= MaxClients && IsClientConnected(client) && IsClientInGame(client))
         return true;
     return false;
 }
 
 /** IsPaused state **/
-stock bool:IsPaused() {
+stock bool:IsPaused() 
+{
     return bool:GameRules_GetProp("m_bMatchWaitingForResume");
 }
