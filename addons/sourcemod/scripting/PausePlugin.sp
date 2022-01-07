@@ -20,9 +20,6 @@ public Plugin:myinfo = {
 public void OnPluginStart() {
     /** Load Translations **/
     LoadTranslations("pauseplugin.phrases");
-
-    // Global Variables
-    new team = GetClientTeam(client);
     
     /** Admin Commands **/
     RegAdminCmd("sm_forcetechpause", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
@@ -118,7 +115,7 @@ public Action Command_Pause(int client, int args)
         return Plugin_Handled;
     }
 
-    if(team == CS_TEAM_T)
+    if(GetClientTeam(client) == CS_TEAM_T)
     {
         ServerCommand("timeout_terrorist_start");
         PrintToChatAll("%t", "Pause", client);
@@ -126,7 +123,7 @@ public Action Command_Pause(int client, int args)
         return Plugin_Handled;
     }
     
-    else if(team == CS_TEAM_CT)
+    else if(GetClientTeam(client) == CS_TEAM_CT)
     {
         ServerCommand("timeout_ct_start");
         PrintToChatAll("%t", "Pause", client);
@@ -137,7 +134,7 @@ public Action Command_Pause(int client, int args)
     return Plugin_Continue;
 }
 
-public Action Command_UnPause(int client, int args) 
+public Action Command_Unpause(int client, int args) 
 {
     if (IsPaused() || !IsValidClient(client))
     {
@@ -145,7 +142,7 @@ public Action Command_UnPause(int client, int args)
         return Plugin_Handled;
     }
 
-    if(team == CS_TEAM_T)
+    if(GetClientTeam(client) == CS_TEAM_T)
     {
         GameRules_SetPropFloat("m_flTerroristTimeOutRemaining", 0.0, 0, true);
         PrintToChatAll("%t", "tUnpause", client);
@@ -153,7 +150,7 @@ public Action Command_UnPause(int client, int args)
         return Plugin_Handled;
     }
     
-    else if(tean == CS_TEAM_CT)
+    else if(GetClientTeam(client) == CS_TEAM_CT)
     {
         GameRules_SetPropFloat("m_flCTTimeOutRemaining", 0.0, 0, true);
         PrintToChatAll("%t", "ctUnpause", client);
