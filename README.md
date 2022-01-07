@@ -29,7 +29,6 @@ And reworked by me to support more variations and in general use of builtin feat
 > * 1.0.4a - Takes the needed features of timer for pauses, limit and technical aspect into consideration.
 
 ## Credits
-> * jp01 - Helping solving the puzzle
 > * Bacardi - Giving me the start features to edit this up.
 > * BeepIsla - For giving me that simple idea of using the built-in system.
 
