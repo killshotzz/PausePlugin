@@ -4,18 +4,10 @@
 #include <sdktools>
 #include <colors>
 
-/** Macros **/
-#define max_usage 4
-#define timer_delay 30.0
-
-/** Bools **/
-new bool:g_ctUnpaused = false;
-new bool:g_tUnpaused = false;
-new bool:g_bTimerEnd = false;
-
 /** Global Variables **/
-int g_vcount[4]; 
+/**int g_vcount[4]; 
 Handle g_vtrack_timer;
+**/
 
 public Plugin:myinfo = {
     name = "CS:GO Pause Commands",
@@ -29,6 +21,9 @@ public void OnPluginStart() {
     /** Load Translations **/
     LoadTranslations("pauseplugin.phrases");
 
+    // Global Variables
+    new team = GetClientTeam(client);
+    
     /** Admin Commands **/
     RegAdminCmd("sm_forcetechpause", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
     RegAdminCmd("sm_forcetechnical", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
@@ -55,6 +50,7 @@ public void OnPluginStart() {
     RegConsoleCmd("sm_up", Command_Unpause, "Requests an unpause");
 }
 
+/**
 public OnMapStart() {
     g_ctUnpaused = false;
     g_tUnpaused = false;
@@ -71,6 +67,7 @@ public OnMapStart() {
         delete g_vtrack_timer;
     }
 }
+**/
 
 /** Force Tech Pause **/
 public Action Command_ForceTechPause(int client, int args){
@@ -112,7 +109,63 @@ public Action Command_TechPause(int client, int args){
     return Plugin_Handled;
 }
 
-/** Pause **/
+/** Pause Command **/
+public Action Command_Pause(int client, int args)
+{
+    if (IsPaused() || !IsValidClient(client))
+    {
+        // Is the game paused or is the client invalid? Terminate process.
+        return Plugin_Handled;
+    }
+
+    if(team == CS_TEAM_T)
+    {
+        ServerCommand("timeout_terrorist_start");
+        PrintToChatAll("%t", "Pause", client);
+        
+        return Plugin_Handled;
+    }
+    
+    else if(team == CS_TEAM_CT)
+    {
+        ServerCommand("timeout_ct_start");
+        PrintToChatAll("%t", "Pause", client);
+        
+        return Plugin_Handled;
+    }
+
+    return Plugin_Continue;
+}
+
+public Action Command_UnPause(int client, int args) 
+{
+    if (IsPaused() || !IsValidClient(client))
+    {
+        // Is the game paused or is the client invalid? Terminate process.
+        return Plugin_Handled;
+    }
+
+    if(team == CS_TEAM_T)
+    {
+        GameRules_SetPropFloat("m_flTerroristTimeOutRemaining", 0.0, 0, true);
+        PrintToChatAll("%t", "tUnpause", client);
+        
+        return Plugin_Handled;
+    }
+    
+    else if(tean == CS_TEAM_CT)
+    {
+        GameRules_SetPropFloat("m_flCTTimeOutRemaining", 0.0, 0, true);
+        PrintToChatAll("%t", "ctUnpause", client);
+        
+        return Plugin_Handled;
+    }
+
+    return Plugin_Continue;
+}
+
+
+/** Pause
 public Action Command_Pause(int client, int args) {
     if(g_vtrack_timer != null)
     {
@@ -146,7 +199,7 @@ public Action Command_Pause(int client, int args) {
     return Plugin_Handled;
 }
 
-/** Unpause **/
+ Unpause 
 public Action Command_Unpause(int client, int args) {
     if (!IsPaused() || !IsValidClient(client))
         return Plugin_Handled;
@@ -169,7 +222,6 @@ public Action Command_Unpause(int client, int args) {
     return Plugin_Handled;
 }
 
-/**
 public Action timer_callback(Handle timer){
     if(global_variable_track_timer = null);
 
@@ -177,9 +229,7 @@ public Action timer_callback(Handle timer){
     PrintToChatAll("%t", "Auto Unpause");
     return Plugin_Continue;
 }
-**/
-
-/** New Callback Timer **/
+ New Callback Timer 
 public Action timer_callback(Handle timer)
 {
 	if (GetConVarBool(g_bTimerEnd))
@@ -220,7 +270,7 @@ public Action timer_callback(Handle timer)
 		}
 	}
 }
-		    
+**/		    
 
 /** Valid client state **/
 stock bool:IsValidClient(client) 

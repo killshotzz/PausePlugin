@@ -37,14 +37,4 @@
   	{
     	"en"      		"The T team wants to unpause. Waiting for the CT team to type {lightgreen}!unpause or !up{lightgreen}."
   	}
-	
-	"Timeleft"
-	{
-		"#format"		"{1:s},{2:s},{3:i}"
-		"en"			"{1} {blue}{2} {default}- {lightgreen}{3} seconds remaining"
-	}
-	"Unpause Auto"
-	{
-		"en"			"Pause has ended. Resuming match!"
-	}
 }
