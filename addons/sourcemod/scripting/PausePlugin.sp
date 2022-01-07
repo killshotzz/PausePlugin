@@ -34,10 +34,12 @@ public void OnPluginStart() {
     /** Pause Commands **/
     RegConsoleCmd("sm_pause", Command_Pause, "Requests a pause");
     RegConsoleCmd("sm_p", Command_Pause, "Requests a pause");
-    RegConsoleCmd("sm_tech", Command_TechPause, "Calls for a tech pause");
-    RegConsoleCmd("sm_t", Command_Pause, "Requests a pause");
     RegConsoleCmd("sm_tac", Command_Pause, "Requests a pause");
     RegConsoleCmd("sm_tactical", Command_Pause, "Requests a pause");
+
+    /** Technical Pause Commands **/
+    RegConsoleCmd("sm_tech", Command_TechPause, "Calls for a tech pause");
+    RegConsoleCmd("sm_t", Command_TechPause, "Requests a pause");
 
     /** Unpause Commands **/
     RegConsoleCmd("sm_unpause", Command_Unpause, "Requests an unpause");
