@@ -1,39 +1,34 @@
 "Phrases"
 {
-  "ForceTechPauseMessage"
-  {
-    "en"      "An admin has called for a technical pause."
-  }
+	
+  	"ForceTechPauseMessage"
+  	{
+    	"en"      		"An admin has called for a technical pause."
+  	}
 
-  "ForcePause"
-  {
-    "en"      "An admin forced a pause!"
-  }
+  	"ForcePause"
+  	{
+    	"en"      		"An admin forced a pause!"
+  	}
 
-  "ForceUnpause"
-  {
-    "en"      "An admin forced a unpause!"
-  }
+  	"ForceUnpause"
+  	{
+    	"en"      		"An admin forced a unpause!"
+  	}
 
-  "TechPauseMessage"
-  {
-    "#format" "{1:N}"
-    "en"      "{1} has called for a technical pause."
-  }
+  	"TechPauseMessage"
+  	{
+    	"#format" 		"{1:N}"
+    	"en"      		"{1} has called for a technical pause."
+  	}
 
-  "Pause"
-  {
-    "#format" "{1:N}"
-    "en"      "{1} has requested a pause."
-  }
+	"TechUnpauseMessag"
+		"#format"		"{1:N}"
+		"en"			"{1} has ended the technical pause. Resuming game!"
 
-  "ctUnpause"
-  {
-    "en"      "The CT team wants to unpause. Waiting for the T team to type {lightgreen}!unpause or !up{lightgreen}."
-  }
-
-  "tUnpause"
-  {
-    "en"      "The T team wants to unpause. Waiting for the CT team to type {lightgreen}!unpause or !up{lightgreen}."
-  }
+  	"Pause"
+  	{
+    	"#format" "{1:N}"
+    	"en"      		"{1} has requested a pause."
+  	}
 }
