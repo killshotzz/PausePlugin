@@ -11,10 +11,11 @@
 /** Bools **/
 new bool:g_ctUnpaused = false;
 new bool:g_tUnpaused = false;
+new bool:g_bTimerEnd = false;
 
 /** Global Variables **/
-int global_variable_count[4]; 
-Handle global_variable_track_timer;
+int g_vcount[4]; 
+Handle g_vtrack_timer;
 
 public Plugin:myinfo = {
     name = "CS:GO Pause Commands",
@@ -59,15 +60,15 @@ public OnMapStart() {
     g_tUnpaused = false;
 
     // Team 0 = None || Team 1 = Spectators || Team 2 = T's || Team 3 = CT's
-    global_variable_count[0] = max_usage;
-    global_variable_count[1] = max_usage;
-    global_variable_count[2] = 0;
-    global_variable_count[3] = 0;
+    g_vcount[0] = max_usage;
+    g_vcount[1] = max_usage;
+    g_vcount[2] = 0;
+    g_vcount[3] = 0;
 
     // Kill the timer if it already exists
-    if(global_variable_track_timer != null)
+    if(g_vtrack_timer != null)
     {
-        delete global_variable_track_timer;
+        delete g_vtrack_timer;
     }
 }
 
@@ -113,7 +114,7 @@ public Action Command_TechPause(int client, int args){
 
 /** Pause **/
 public Action Command_Pause(int client, int args) {
-    if(global_variable_track_timer != null)
+    if(g_vtrack_timer != null)
     {
         // Timer is still running. Kill the timer.
         return Plugin_Handled;
@@ -130,14 +131,14 @@ public Action Command_Pause(int client, int args) {
 
     int team_index = GetClientTeam(client);
 
-    if(global_variable_count[team_index] >= max_usage)
+    if(g_vcount[team_index] >= max_usage)
     {
         ReplyToCommand(client, "There are no more pauses left (%i)", max_usage);
         return Plugin_Handled;
     }
 
-    global_variable_count[team_index] = global_variable_count[team_index] + 1;
-    global_variable_track_timer = CreateTimer(timer_delay, timer_callback);
+    g_vcount[team_index] = global_variable_count[team_index] + 1;
+    g_vtrack_timer = CreateTimer(timer_delay, timer_callback);
 
     PrintToChatAll("%t", "Pause", client, global_variable_count[team_index]);
     ServerCommand("mp_pause_match");
@@ -168,14 +169,57 @@ public Action Command_Unpause(int client, int args) {
     return Plugin_Handled;
 }
 
-/** Timer Callback **/
+/**
 public Action timer_callback(Handle timer){
-    global_variable_track_timer = null;
+    if(global_variable_track_timer = null);
 
     ServerCommand("mp_unpause_match");
     PrintToChatAll("%t", "Auto Unpause");
     return Plugin_Continue;
 }
+**/
+
+/** New Callback Timer **/
+public Action timer_callback(Handle timer){
+    if(g_vtrack_timer = null);
+    return Plugin_Continue;
+
+	if (GetConVarBool(g_bTimerEnd))
+	{
+		Handle hTmp;
+		hTmp = FindConVar("mp_timelimit");
+		int iTimeLimit;
+		iTimeLimit = GetConVarInt(hTmp);
+		if (hTmp != null)
+			CloseHandle(hTmp);
+		if (iTimeLimit > 0)
+		{
+			int timeleft;
+			GetPauseTimeLeft(timeleft);
+			switch (timeleft)
+			{
+				case 30:PrintToChatAll("%t", "Timeleft", timeleft);
+				case 20:PrintToChatAll("%t", "Timeleft", timeleft);
+				case 10:PrintToChatAll("%t", "Timeleft", timeleft);
+				case 3:PrintToChatAll("%t", "Timeleft", timeleft);
+				case 2:PrintToChatAll("%t", "Timeleft", timeleft);
+				case 1:PrintToChatAll("%t", "Timeleft", timeleft);	
+				case -1:
+				{
+					if (!g_bTimerEnd)
+					{
+						g_bTimerEnd = true;
+						ServerCommand("mp_unpause_match");
+				}
+			}
+
+			if (timeleft == 30 || timeleft == 20 || timeleft == 10 || timeleft == 3 || timeleft == 2 || timeleft == 1)
+			{
+				CPrintToChatAll("%t", "Auto Unpause");
+			}
+		}
+        return Plugin_Continue;
+	}
 
 /** Valid client state **/
 stock bool:IsValidClient(client) {
