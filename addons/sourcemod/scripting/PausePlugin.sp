@@ -8,8 +8,6 @@ public Plugin:myinfo = {
     name = "CS:GO Pause Commands",
     author = "splewis & ^kS",
     description = "Adds simple pause/unpause commands for players",
-    version = "1.0.4",
-    url = "https://github.com/ksgoescoding/PausePlugin"
 };
 
 public void OnPluginStart() {
@@ -32,6 +30,15 @@ public void OnPluginStart() {
     RegConsoleCmd("sm_p", Command_Pause, "Requests a pause");
     RegConsoleCmd("sm_tac", Command_Pause, "Requests a pause");
     RegConsoleCmd("sm_tactical", Command_Pause, "Requests a pause");
+
+    /** Technical Pause Commands **/
+    RegConsoleCmd("sm_tech", Command_TechPause, "Calls for a tech pause");
+    RegConsoleCmd("sm_t", Command_TechPause, "Requests a pause");
+
+    /** Unpause Commands **/
+    RegConsoleCmd("sm_unpause", Command_Unpause, "Requests an unpause");
+    RegConsoleCmd("sm_up", Command_Unpause, "Requests an unpause");
+}
 
     /** Technical Pause Commands **/
     RegConsoleCmd("sm_tech", Command_TechPause, "Calls for a tech pause");
