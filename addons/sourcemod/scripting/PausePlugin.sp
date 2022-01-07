@@ -182,42 +182,43 @@ public Action timer_callback(Handle timer){
 /** New Callback Timer **/
 public Action timer_callback(Handle timer)
 {
-if (GetConVarBool(g_bTimerEnd))
+	if (GetConVarBool(g_bTimerEnd))
 	{
-		    Handle hTmp;
-		    hTmp = FindConVar("mp_timelimit");
-		    int iTimeLimit;
-		    iTimeLimit = GetConVarInt(hTmp);
-		    if (hTmp != null)
-			    CloseHandle(hTmp);
-		    if (iTimeLimit > 0)
+		Handle hTmp;
+		hTmp = FindConVar("mp_timelimit");
+		int iTimeLimit;
+		iTimeLimit = GetConVarInt(hTmp);
+		if (hTmp != null)
+			CloseHandle(hTmp);
+
+		if (iTimeLimit > 0)
 		{
-			    int timeleft;
-			    GetPauseTimeLeft(timeleft);
-			    switch (timeleft)
-			    {
-				        case 30:PrintToChatAll("%t", "Timeleft", timeleft);
-				        case 20:PrintToChatAll("%t", "Timeleft", timeleft);
-				        case 10:PrintToChatAll("%t", "Timeleft", timeleft);
-				        case 3:PrintToChatAll("%t", "Timeleft", timeleft);
-				        case 2:PrintToChatAll("%t", "Timeleft", timeleft);
-				        case 1:PrintToChatAll("%t", "Timeleft", timeleft);	
-				        case -1:
-				        {
-					            if (!g_bTimerEnd)
-					            {
-						                g_bTimerEnd = true;
-						                ServerCommand("mp_unpause_match");
-				                }
-                        }
-			    }
-        }
+			int timeleft;
+			GetPauseTimeLeft(timeleft);
+			switch (timeleft)
+			{
+				case 30:PrintToChatAll("%t", "Timeleft", timeleft);
+				case 20:PrintToChatAll("%t", "Timeleft", timeleft);
+				case 10:PrintToChatAll("%t", "Timeleft", timeleft);
+				case 3:PrintToChatAll("%t", "Timeleft", timeleft);
+				case 2:PrintToChatAll("%t", "Timeleft", timeleft);
+				case 1:PrintToChatAll("%t", "Timeleft", timeleft);	
+				case -1:
+				{
+					if (!g_bTimerEnd)
+					{
+						g_bTimerEnd = true;
+						ServerCommand("mp_unpause_match");
+					}
+				}
+			}
+		}
 
 		if (timeleft == 30 || timeleft == 20 || timeleft == 10 || timeleft == 3 || timeleft == 2 || timeleft == 1)
 		{
 				CPrintToChatAll("%t", "Auto Unpause");
 		}
-     }
+	}
 }
 		    
 
