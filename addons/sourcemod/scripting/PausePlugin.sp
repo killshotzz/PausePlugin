@@ -4,11 +4,6 @@
 #include <sdktools>
 #include <colors>
 
-/** Global Variables **/
-/**int g_vcount[4]; 
-Handle g_vtrack_timer;
-**/
-
 public Plugin:myinfo = {
     name = "CS:GO Pause Commands",
     author = "splewis & ^kS",
@@ -132,3 +127,9 @@ stock bool:IsValidClient(client)
         return true;
     return false;
 }
+
+/** IsPaused state **/
+stock bool:IsPaused() 
+{
+    return bool:GameRules_GetProp("m_bMatchWaitingForResume");
+} 
