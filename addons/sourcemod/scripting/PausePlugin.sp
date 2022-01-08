@@ -6,6 +6,7 @@
 
 public Plugin:myinfo = {
     name = "CS:GO Pause Commands",
+    version = "1.0.4b"
     author = "splewis & ^kS",
     description = "Adds simple pause/unpause commands for players",
 };
@@ -32,21 +33,15 @@ public void OnPluginStart() {
     RegConsoleCmd("sm_tactical", Command_Pause, "Requests a pause");
 
     /** Technical Pause Commands **/
-    RegConsoleCmd("sm_tech", Command_TechPause, "Calls for a tech pause");
-    RegConsoleCmd("sm_t", Command_TechPause, "Requests a pause");
+    RegConsoleCmd("sm_tech", Command_TechPause, "Calls for a technical pause");
+    RegConsoleCmd("sm_t", Command_TechPause, "Calls for a technical pause");
+    RegConsoleCmd("sm_tec", Command_TechPause, "Calls for a technical pause");
+    RegConsoleCmd("sm_technical", Command_TechPause, "Calls for a technical pause");
 
     /** Unpause Commands **/
     RegConsoleCmd("sm_unpause", Command_Unpause, "Requests an unpause");
     RegConsoleCmd("sm_up", Command_Unpause, "Requests an unpause");
-}
-
-    /** Technical Pause Commands **/
-    RegConsoleCmd("sm_tech", Command_TechPause, "Calls for a tech pause");
-    RegConsoleCmd("sm_t", Command_TechPause, "Requests a pause");
-
-    /** Unpause Commands **/
-    RegConsoleCmd("sm_unpause", Command_TechUnpause, "Requests an unpause");
-    RegConsoleCmd("sm_up", Command_TechUnpause, "Requests an unpause");
+    RegConsoleCmd("sm_unp", Command_Unpause, "Requests an unpause");
 }
 
 /** Force Tech Pause **/
