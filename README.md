@@ -28,6 +28,10 @@ And reworked by me to support more variations and in general use of builtin feat
 > * 1.0.3 - Development with using the built-in system
 > * 1.0.4a - Takes the needed features of timer for pauses, limit and technical aspect into consideration.
 
+## Credits
+> * Bacardi - Giving me the start features to edit this up.
+> * BeepIsla - For giving me that simple idea of using the built-in system.
+
 ## To Do:
 > * More command variations of technical pause
 > * Cleanup the variations in KeyValues to simplify code even further.

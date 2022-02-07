@@ -1,0 +1,35 @@
+"Phrases"
+{
+	"ForceTechPauseMessage"
+	{
+		"tr" "Bir yetkili teknik mola istedi."
+	}
+	
+	"ForcePause"
+	{
+		"tr" "Bir yetkili mola istedi."
+	}
+	
+	"ForceUnpause"
+	{
+		"tr" "Bir yetkili devam kararı istedi."
+	}
+	
+	"TechPauseMessage"
+	{
+		"#format" "{1:N}"
+		"tr" "{1} teknik mola istedi."
+	}
+	
+	"TechUnpauseMessage"
+	{
+		"#format" "{1:N}"
+		"tr" "{1} teknik molayı çevirdi. Oyun devam ediyor!"
+	}
+	
+	"Pause"
+	{
+		"#format" "{1:N}"
+		"tr" "{1} mola istedi."
+	}
+} 
