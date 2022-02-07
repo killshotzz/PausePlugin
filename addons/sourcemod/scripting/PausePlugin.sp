@@ -86,8 +86,6 @@ public Action Command_TechPause(int client, int args){
 
 /** Technical Unpause **/
 public Action Command_TechUnpause(int client, int args){
-    if (!IsPaused())
-        return Plugin_Handled;
 
     ServerCommand("mp_unpause_match");
     PrintToChatAll("%t", "TechUnpauseMessage", client, client);
