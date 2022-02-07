@@ -36,15 +36,6 @@ public void OnPluginStart() {
     RegConsoleCmd("sm_t", Command_TechPause, "Requests a pause");
 
     /** Unpause Commands **/
-    RegConsoleCmd("sm_unpause", Command_Unpause, "Requests an unpause");
-    RegConsoleCmd("sm_up", Command_Unpause, "Requests an unpause");
-}
-
-    /** Technical Pause Commands **/
-    RegConsoleCmd("sm_tech", Command_TechPause, "Calls for a tech pause");
-    RegConsoleCmd("sm_t", Command_TechPause, "Requests a pause");
-
-    /** Unpause Commands **/
     RegConsoleCmd("sm_unpause", Command_TechUnpause, "Requests an unpause");
     RegConsoleCmd("sm_up", Command_TechUnpause, "Requests an unpause");
 }
