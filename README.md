@@ -6,13 +6,13 @@ This is an extremely simple plugin to add pause-commands for players that simply
 It adds some simple commands that can be used by all players:
 
 # Player Commands
-> * sm_tech (!tech, !t)
-> * sm_pause (!pause, !p, !tac, !tactical)
-> * sm_unpause (!unpause, !up)
+> * sm_tech (!tech)
+> * sm_pause (!pause, !tac)
+> * sm_unpause (!unpause)
 
 It also adds commands for admins to use:
 # Admin Commands
-> * sm_forcetechpause (!forcetechnical, !ftech, !ftec, ft)
+> * sm_forcetechpause (!forcetechnical, !ftech)
 > * sm_forcepause (!forcepause, !fp)
 > * sm_forceunpause (!forceunpause, !fup)
 
@@ -27,6 +27,7 @@ And reworked by me to support more variations and in general use of builtin feat
 > * 1.0.2 - Added translation files, fixed more variations of commands and cleaned up the code.
 > * 1.0.3 - Development with using the built-in system
 > * 1.0.4a - Takes the needed features of timer for pauses, limit and technical aspect into consideration.
+> * 1.0.5a - Both teams now need to write !unpause, to start the match. Fixing up syntax, as well as deleting certain command variations, to loosen up the command section.
 
 ## Credits
 > * Bacardi - Giving me the start features to edit this up.

@@ -16,19 +16,35 @@
     	"en"      		"An admin forced a unpause!"
   	}
 
-  	"TechPauseMessage"
+  	"TechPause"
   	{
     	"#format" 		"{1:N}"
     	"en"      		"{1} has called for a technical pause."
   	}
 
-	"TechUnpauseMessage"
-		"#format"		"{1:N}"
-		"en"			"{1} has ended the technical pause. Resuming game!"
+		"GameNotPaused"
+		{
+			"#format"		"{1:N}"
+			"en"				"Sorry {1}, this command is not available, when the game is running! Use !pause or !tech."
+		}
+
+		"UnpauseRequired"
+		{
+			"en"				"Both teams need to use !unpause to resume the match!"
+		}
+
+		"UnpauseRequest"
+			"#format"		"{1:N}"
+			"en"				"{1} has requested to unpause the game!"
+
+		"UnpauseSuccess"
+		{
+			"#format"		"Match is unpaused. Resuming game!"
+		}
 
   	"Pause"
   	{
-    	"#format" "{1:N}"
-    	"en"      		"{1} has requested a pause."
+    	"#format" 	"{1:N}"
+    	"en"      	"{1} has requested a pause."
   	}
 }

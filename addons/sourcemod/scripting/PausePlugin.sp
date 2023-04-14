@@ -6,7 +6,7 @@
 
 public Plugin:myinfo = {
     name = "CS:GO Pause Commands",
-    version = "1.0.4b"
+    version = "1.0.5a",
     author = "splewis & ^kS",
     description = "Adds simple pause/unpause commands for players",
 };
@@ -19,8 +19,6 @@ public void OnPluginStart() {
     RegAdminCmd("sm_forcetechpause", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
     RegAdminCmd("sm_forcetechnical", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
     RegAdminCmd("sm_ftech", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
-    RegAdminCmd("sm_ftec", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
-    RegAdminCmd("sm_ft", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
     RegAdminCmd("sm_forcepause", Command_ForcePause, ADMFLAG_GENERIC, "Forces a pause");
     RegAdminCmd("sm_fp", Command_ForcePause, ADMFLAG_GENERIC, "Forces a pause");
     RegAdminCmd("sm_forceunpause", Command_ForceUnpause, ADMFLAG_GENERIC, "Forces an unpause");
@@ -28,36 +26,34 @@ public void OnPluginStart() {
    
     /** Pause Commands **/
     RegConsoleCmd("sm_pause", Command_Pause, "Requests a pause");
-    RegConsoleCmd("sm_p", Command_Pause, "Requests a pause");
     RegConsoleCmd("sm_tac", Command_Pause, "Requests a pause");
-    RegConsoleCmd("sm_tactical", Command_Pause, "Requests a pause");
 
     /** Technical Pause Commands **/
     RegConsoleCmd("sm_tech", Command_TechPause, "Calls for a technical pause");
-    RegConsoleCmd("sm_t", Command_TechPause, "Calls for a technical pause");
-    RegConsoleCmd("sm_tec", Command_TechPause, "Calls for a technical pause");
     RegConsoleCmd("sm_technical", Command_TechPause, "Calls for a technical pause");
 
     /** Unpause Commands **/
-    RegConsoleCmd("sm_unpause", Command_TechUnpause, "Requests an unpause");
-    RegConsoleCmd("sm_up", Command_TechUnpause, "Requests an unpause");
-    RegConsoleCmd("sm_unp", Command_TechUnpause, "Requests an unpause");
+    RegConsoleCmd("sm_unpause", Command_Unpause, "Requests an unpause");
 }
 
-/** Force Tech Pause **/
-public Action Command_ForceTechPause(int client, int args){
-    if (IsPaused())
+/** Force Tech Pause - Pause the game without allowing players to unpause it manually. */
+public Action Command_ForceTechPause(int client, int args) {
+    if (IsPaused()) {
+        PrintToChat(client, "%t", "GameAlreadyPaused");
         return Plugin_Handled;
+    }
 
-    ServerCommand("mp_pause_match");
-    PrintToChatAll("%t", "ForceTechPauseMessage", client);
+    ServerCommand("mp_pause_no_pause");
+    PrintToChatAll("%t", "ForceTechPause", client);
     return Plugin_Handled;
 }
 
 /** Force Pause **/
 public Action Command_ForcePause(int client, int args) {
-    if (IsPaused())
+    if (IsPaused()) {
+        PrintToChat(client, "%t", "GameAlreadyPaused");
         return Plugin_Handled;
+    }
 
     ServerCommand("mp_pause_match");
     PrintToChatAll("%t", "ForcePause", client);
@@ -66,8 +62,10 @@ public Action Command_ForcePause(int client, int args) {
 
 /** Force Unpause **/
 public Action Command_ForceUnpause(int client, int args) {
-    if (!IsPaused())
+    if (!IsPaused()) {
+        PrintToChat(client, "%t", "GameNotPaused");
         return Plugin_Handled;
+    }
     
     ServerCommand("mp_unpause_match");
     PrintToChatAll("%t", "ForceUnpause", client);
@@ -75,21 +73,95 @@ public Action Command_ForceUnpause(int client, int args) {
 }
 
 /** Technical Pause **/
-public Action Command_TechPause(int client, int args){
-    if (IsPaused())
+public Action Command_TechPause(int client, int args) {
+    if (IsPaused()) {
         return Plugin_Handled;
+    }
 
-    ServerCommand("mp_pause_match");
-    PrintToChatAll("%t", "TechPauseMessage", client, client);
+    ServerCommand("mp_pause_no_pause");
+    PrintToChatAll("%t", "TechPause", client);
+
     return Plugin_Handled;
 }
 
-/** Technical Unpause **/
-public Action Command_TechUnpause(int client, int args){
+/** Unpause Command **/
+public Action Command_Unpause(int client, int args)
+{
+if (!IsValidClient(client))
+{
+// Is the client invalid? Terminate process.
+return Plugin_Handled;
+}
 
-    ServerCommand("mp_unpause_match");
-    PrintToChatAll("%t", "TechUnpauseMessage", client, client);
+if (!IsPaused())
+{
+    PrintToChat(client, "%t", "GameNotPaused");
     return Plugin_Handled;
+}
+
+// Check if a player from each team has used !unpause
+int numPlayers = GetClientCount();
+bool unpauseRequired = true;
+bool team1Unpaused = false;
+bool team2Unpaused = false;
+
+for (int i = 1; i <= numPlayers; i++)
+{
+    int player = GetClientOfIndex(i);
+    if (!IsValidClient(player))
+    {
+        continue;
+    }
+
+    if (IsClientInGame(player) && IsPlayerAlive(player))
+    {
+        int team = GetClientTeam(player);
+        if (team == CS_TEAM_T && HasClientCommand(player, "!unpause"))
+        {
+            team1Unpaused = true;
+        }
+        else if (team == CS_TEAM_CT && HasClientCommand(player, "!unpause"))
+        {
+            team2Unpaused = true;
+        }
+
+        if (team1Unpaused && team2Unpaused)
+        {
+            unpauseRequired = false;
+            break;
+        }
+    }
+}
+
+if (unpauseRequired)
+{
+    // Check if the player who executed the !unpause command is in one of the teams
+    int clientTeam = GetClientTeam(client);
+    if (clientTeam != CS_TEAM_T && clientTeam != CS_TEAM_CT)
+    {
+        PrintToChat(client, "%t", "UnpauseRequired");
+        return Plugin_Handled;
+    }
+
+    // Mark the team as unpaused
+    if (clientTeam == CS_TEAM_T)
+    {
+        team1Unpaused = true;
+    }
+    else
+    {
+        team2Unpaused = true;
+    }
+
+    PrintToChatAll("%n %t", client, "UnpauseRequest", GetClientName(client));
+}
+else
+{
+    ServerCommand("mp_unpause_match");
+    PrintToChatAll("%t", "UnpauseSuccess", client);
+}
+
+return Plugin_Handled;
 }
 
 /** Pause Command **/
@@ -101,24 +173,73 @@ public Action Command_Pause(int client, int args)
         return Plugin_Handled;
     }
 
-    if(GetClientTeam(client) == CS_TEAM_T)
+    int clientTeam = GetClientTeam(client);
+    bool canPause = false;
+
+    if (clientTeam == CS_TEAM_T || clientTeam == CS_TEAM_CT)
     {
-        ServerCommand("timeout_terrorist_start");
-        PrintToChatAll("%t", "Pause", client);
-        
-        return Plugin_Handled;
+        // Check if a player from each team has used !pause
+        int numPlayers = GetClientCount();
+        bool team1Paused = false;
+        bool team2Paused = false;
+
+        for (int i = 1; i <= numPlayers; i++)
+        {
+            int player = GetClientOfIndex(i);
+            if (!IsValidClient(player))
+            {
+                continue;
+            }
+
+            if (IsClientInGame(player) && IsPlayerAlive(player))
+            {
+                int team = GetClientTeam(player);
+                if (team == CS_TEAM_T && HasClientCommand(player, "!pause"))
+                {
+                    team1Paused = true;
+                }
+                else if (team == CS_TEAM_CT && HasClientCommand(player, "!pause"))
+                {
+                    team2Paused = true;
+                }
+
+                if (team1Paused && team2Paused)
+                {
+                    canPause = true;
+                    break;
+                }
+            }
+        }
     }
-    
-    else if(GetClientTeam(client) == CS_TEAM_CT)
+    else
     {
-        ServerCommand("timeout_ct_start");
-        PrintToChatAll("%t", "Pause", client);
-        
-        return Plugin_Handled;
+        // The client is a spectator, so they can always pause
+        canPause = true;
     }
 
-    return Plugin_Continue;
-}	    
+    if (canPause)
+    {
+        ServerCommand("mp_pause_match");
+        PrintToChatAll("%t", "PauseRequest", client);
+
+        // Add 30-second timer
+        Timer.CreateTimer("unpause_timer", 30.0f, () =>
+        {
+            // Check if the game is still paused
+            if (IsPaused())
+            {
+                ServerCommand("mp_unpause_match");
+                PrintToChatAll("%t", "UnpauseAutomatic");
+            }
+        });
+    }
+    else
+    {
+        PrintToChat(client, "%t", "PauseRequired");
+    }
+
+    return Plugin_Handled;
+}    
 
 /** Valid client state **/
 stock bool:IsValidClient(client) 
@@ -133,3 +254,5 @@ stock bool:IsPaused()
 {
     return bool:GameRules_GetProp("m_bMatchWaitingForResume");
 } 
+
+
