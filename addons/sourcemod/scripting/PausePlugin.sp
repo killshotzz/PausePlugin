@@ -15,25 +15,20 @@ public void OnPluginStart() {
     /** Load Translations **/
     LoadTranslations("pauseplugin.phrases");
     
-    /** Admin Commands **/
-    RegAdminCmd("sm_forcetechpause", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
-    RegAdminCmd("sm_forcetechnical", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
-    RegAdminCmd("sm_ftech", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
-    RegAdminCmd("sm_forcepause", Command_ForcePause, ADMFLAG_GENERIC, "Forces a pause");
-    RegAdminCmd("sm_fp", Command_ForcePause, ADMFLAG_GENERIC, "Forces a pause");
-    RegAdminCmd("sm_forceunpause", Command_ForceUnpause, ADMFLAG_GENERIC, "Forces an unpause");
-    RegAdminCmd("sm_fup", Command_ForceUnpause, ADMFLAG_GENERIC, "Forces an unpause");
+    // Admin Commands
+    RegAdminCmd("sm_forcetechpause|sm_forcetechnical|sm_ftech", Command_ForceTechPause, ADMFLAG_GENERIC, "Forces a technical pause");
+    RegAdminCmd("sm_forcepause|sm_fp", Command_ForcePause, ADMFLAG_GENERIC, "Forces a pause");
+    RegAdminCmd("sm_forceunpause|sm_fup", Command_ForceUnpause, ADMFLAG_GENERIC, "Forces an unpause");
    
-    /** Pause Commands **/
-    RegConsoleCmd("sm_pause", Command_Pause, "Requests a pause");
-    RegConsoleCmd("sm_tac", Command_Pause, "Requests a pause");
+    /** Register Commands **/
+    new ConfigFile:commands = new ConfigFile("commands.cfg");
+    for (new i = 0; i < commands.GetNumKeys(); i++) {
+        new command[64], function[64];
+        commands.GetKeyValue(i, command, sizeof(command), function, sizeof(function));
+        RegConsoleCmd(command, function, ADMFLAG_GENERIC, "");
+    }
 
-    /** Technical Pause Commands **/
-    RegConsoleCmd("sm_tech", Command_TechPause, "Calls for a technical pause");
-    RegConsoleCmd("sm_technical", Command_TechPause, "Calls for a technical pause");
-
-    /** Unpause Commands **/
-    RegConsoleCmd("sm_unpause", Command_Unpause, "Requests an unpause");
+    RegConsoleCmd("sm_pause|sm_tac", Command_Pause, "Requests a pause");
 }
 
 /** Force Tech Pause - Pause the game without allowing players to unpause it manually. */
@@ -254,5 +249,3 @@ stock bool:IsPaused()
 {
     return bool:GameRules_GetProp("m_bMatchWaitingForResume");
 } 
-
-
