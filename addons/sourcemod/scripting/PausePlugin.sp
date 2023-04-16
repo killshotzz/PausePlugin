@@ -249,3 +249,5 @@ stock bool:IsPaused()
 {
     return bool:GameRules_GetProp("m_bMatchWaitingForResume");
 } 
+
+
