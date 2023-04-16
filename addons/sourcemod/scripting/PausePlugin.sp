@@ -21,9 +21,9 @@ public void OnPluginStart() {
     RegAdminCmd("sm_forceunpause|sm_fup", Command_ForceUnpause, ADMFLAG_GENERIC, "Forces an unpause");
    
     /** Register Commands **/
-    new ConfigFile:commands = new ConfigFile("commands.cfg");
-    for (new i = 0; i < commands.GetNumKeys(); i++) {
-        new command[64], function[64];
+    char command[64], function[64];
+    ConfigFile commands("commands.cfg");
+    for (int i = 0; i < commands.GetNumKeys(); i++) {
         commands.GetKeyValue(i, command, sizeof(command), function, sizeof(function));
         RegConsoleCmd(command, function, ADMFLAG_GENERIC, "");
     }
@@ -120,7 +120,7 @@ for (int i = 1; i <= numPlayers; i++)
             team2Unpaused = true;
         }
 
-        if (team1Unpaused && team2Unpaused)
+        use "unpauseRequired" = !(team1Unpaused && team2Unpaused);
         {
             unpauseRequired = false;
             break;
@@ -249,5 +249,3 @@ stock bool:IsPaused()
 {
     return bool:GameRules_GetProp("m_bMatchWaitingForResume");
 } 
-
-
