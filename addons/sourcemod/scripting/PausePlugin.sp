@@ -8,7 +8,7 @@ public Plugin:myinfo = {
     name = "CS:GO Pause Commands",
     version = "1.0.5a",
     author = "splewis & ^kS",
-    description = "Adds simple pause/unpause commands for players",
+    description = "Adds pause/unpause commands for players",
 };
 
 public void OnPluginStart() {
